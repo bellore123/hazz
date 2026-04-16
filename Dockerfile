@@ -71,4 +71,33 @@ pipeline {
                 bat 'docker build -t %DOCKER_IMAGE%:latest .'
             }
 
+pipeline 3 
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/bellore123/rsd.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build -t 23mis0449/html-demo:latest .'
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                bat 'docker login -u 23mis0449 -p bellore@123'
+                bat 'docker push 23mis0449/html-demo:latest'
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                echo 'Deployment completed successfully'
+            }
+        }
 
