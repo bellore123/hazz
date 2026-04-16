@@ -34,9 +34,41 @@ docker run -d -p 30010:80 my-html-app
 
 docker ps
 
-6. APPLICATION LINK
+6. APPLICATION LINK http://localhost:30010
 
-http://localhost:30010
+pipeline code:
+pipeline {
+    agent any
 
-RESULT:
-The HTML application is successfully containerized and deployed using Docker, and it is accessible through the browser.
+    tools {
+        maven 'Maven3'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/bellore123/vk19.git'
+            }
+        }
+
+pipeline code 2:
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE = "23mis0449/html-demo"
+    }
+    stages {
+        stage('Clone Code') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/bellore123/rsd.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build -t %DOCKER_IMAGE%:latest .'
+            }
+
+
